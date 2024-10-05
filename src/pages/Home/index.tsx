@@ -11,19 +11,25 @@ import {
 } from "./styles"
 
 export function Home() {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, watch } = useForm()
 
-  
+  function handleCreateNewCycle(data: any) {
+    console.log(data)
+  }
+
+  const task = watch("task")
+  const isSubmitDisabled = !task
 
   return (
     <HomeContainer>
-      <form action="">
+      <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
         <FormContainer>
           <label htmlFor="task">I'll work on</label>
           <TaskInput
             id="task"
             list="tasks-suggestions"
             placeholder="Name your project"
+            {...register("task")}
           />
 
           <datalist id="tasks-suggestions">
@@ -55,6 +61,7 @@ export function Home() {
             step={5}
             min={5}
             max={60}
+            {...register("minutesAmount", { valueAsNumber: true })}
           />
           <span>minutes.</span>
         </FormContainer>
@@ -67,7 +74,7 @@ export function Home() {
           <span>0</span>
         </CountDownContainer>
 
-        <StartCountdownButton type="submit" disabled>
+        <StartCountdownButton type="submit" disabled={isSubmitDisabled}>
           <Play size={24} />
           Start
         </StartCountdownButton>
